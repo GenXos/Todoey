@@ -11,7 +11,7 @@ import UIKit
 class TodoListViewController: UITableViewController {
 
     // MARK: - Variables
-    let itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
+    var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -19,15 +19,34 @@ class TodoListViewController: UITableViewController {
         
     }
 
+    // MARK: - IBActions
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            if textField.text != "" {
+                self.itemArray.append(textField.text!)
+            }
+            self.tableView.reloadData()
+            print("\(self.itemArray)")
+            
+        }
+        
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create new item"
+            textField = alertTextField
+        }
+        
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+        
+    }
 }
 
 // MARK: - TableView DataSource Methods
 extension TodoListViewController {
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return 1
-    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -44,7 +63,7 @@ extension TodoListViewController {
     
 }
 
-// MARK - TableView Delegate Methods
+// MARK: - TableView Delegate Methods
 extension TodoListViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
